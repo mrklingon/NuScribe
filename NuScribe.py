@@ -1,3 +1,4 @@
+# Imports go at the top
 from microbit import *
 import random
 import time
@@ -113,7 +114,7 @@ def mkLang():
 def tranWrd(src):
     return tmax[vocab.index(src)]
 
-
+display.scroll("Scribe")
 mode = 5
 modes =["SI","SJ","MX","TI","TJ"]
 SI =0
@@ -121,10 +122,21 @@ SJ =1
 MX =2
 TI = 3
 TJ = 4
-
+talk = False
 verses()
 mkLang()
 while True:
+  if pin_logo.is_touched():
+      if talk:
+          talk = False
+          display.show(Image.ASLEEP)
+          time.sleep(.4)
+          display.clear()
+      else:
+          talk = True
+          display.show(Image.BUTTERFLY)
+          time.sleep(.4)
+          display.clear()
   if button_a.was_pressed():
       mode= mode+1
       if mode>4:
@@ -135,18 +147,26 @@ while True:
       if mode==SI:
           for w in i23:
               display.scroll(w,80)
+              if talk:
+                  speech.say(w)
       
       if mode==SJ:
           for w in j316:
-              display.scroll(w,80)   
+              display.scroll(w,80)
+              if talk:
+                  speech.say(w)
               
       if mode==TJ:
           for w in j316:
-              display.scroll(tranWrd(w),80)   
+              display.scroll(tranWrd(w),80)
+              if talk:
+                  speech.say(tranWrd(w))
               
       if mode==TI:
           for w in j316:
-              display.scroll(tranWrd(w),80)   
+              display.scroll(tranWrd(w),80)
+              if talk:
+                  speech.say(tranWrd(w))
       if mode==MX:
           display.show(Image.DIAMOND)
           mkLang()
